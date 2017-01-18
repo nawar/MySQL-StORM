@@ -106,9 +106,22 @@ extension MySQLStORM {
 			// SELECT ASSEMBLE
 			var str = "SELECT \(clauseSelectList) FROM \(table()) \(clauseWhere) \(clauseOrder)"
 
-
+            // JOIN
+            var joinsStr = ""
+            for join in joins {
+                switch join.direction {
+                case .INNER:
+                    joinsStr += " INNER JOIN \(join.table) ON \(join.onCondition) "
+                default: ()
+                }
+            }
+            
+            str += joinsStr
+            
 			// TODO: Add joins, having, groupby
-
+            
+            
+            // LIMIT & OFFSET
 			if cursor.limit > 0 {
 				str += " LIMIT \(cursor.limit)"
 			}
