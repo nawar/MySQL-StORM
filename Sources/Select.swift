@@ -102,23 +102,20 @@ extension MySQLStORM {
 				offset: cursor.offset,
 				totalRecords: Int(numrecords as! Int64))
 
-
-			// SELECT ASSEMBLE
-			var str = "SELECT \(clauseSelectList) FROM \(table()) \(clauseWhere) \(clauseOrder)"
-
             // JOIN
-            var joinsStr = ""
+            var joinClause = ""
             for join in joins {
                 switch join.direction {
                 case .INNER:
-                    joinsStr += " INNER JOIN \(join.table) ON \(join.onCondition) "
+                    joinClause += " INNER JOIN \(join.table) ON \(join.onCondition) "
                 default: ()
                 }
             }
             
-            str += joinsStr
+            // SELECT ASSEMBLE
+            var str = "SELECT \(clauseSelectList) FROM \(table()) \(joinClause) \(clauseWhere) \(clauseOrder)"
             
-			// TODO: Add joins, having, groupby
+			// TODO: having, groupby
             
             
             // LIMIT & OFFSET
